@@ -1319,12 +1319,12 @@ def puwei(nPU, correct_map, weights, syst=False):
         if syst:
             weights.add(
                 "puweight",
-                correct_map["LUM"]["LUM"](nPU),
+                correct_map["LUM"]["PU"](nPU),
                 correct_map["LUM"]["PUup"](nPU),
                 correct_map["LUM"]["PUdown"](nPU),
             )
         else:
-            weights.add("puweight", correct_map["LUM"]["LUM"](nPU))
+            weights.add("puweight", correct_map["LUM"]["PU"](nPU))
 
 
 def btagSFs(jet, correct_map, weights, SFtype, syst=False):
