@@ -77,7 +77,7 @@ def load_SF(year, campaign, syst=False):
                 f"/cvmfs/cms-griddata.cern.ch/cat/metadata/LUM/{campaign_map()[campaign]}/latest/"
             ):
                 correct_map["LUM"] = correctionlib.CorrectionSet.from_file(
-                    f"/cvmfs/cms-griddata.cern.ch/cat/metadata/LUM/{campaign_map()[campaign]}/latest/puWeights.json.gz"
+                    f"/cvmfs/cms-griddata.cern.ch/cat/metadata/LUM/{campaign_map()[campaign]}/latest/puWeights_BCDEFGHI.json.gz"
                 )
             ## Otherwise custom files
             else:
@@ -329,6 +329,7 @@ def load_SF(year, campaign, syst=False):
 
         ## JME corrections
         elif SF == "JME":
+            print("{campaign_map()[campaign]}")
             if "name" in config[campaign]["JME"].keys():
                 if not os.path.exists(
                     f"src/BTVNanoCommissioning/data/JME/{campaign_map()[campaign]}/latest/jec_compiled_{config[campaign]['JME']['name']}.pkl.gz"
@@ -623,7 +624,10 @@ def JME_shifts(
             j, nj = ak.flatten(nocorrjet), ak.num(nocorrjet)
 
             # JEC
+            #FIXME
+            jecname = jecname.replace("V1","V2")
             JECcorr = correct_map["JME"].compound[f"{jecname}_L1L2L3Res_AK4PFPuppi"]
+
             JEC_input = get_corr_inputs(j, JECcorr)
             JECflatCorrFactor = JECcorr.evaluate(*JEC_input)
 
@@ -1316,15 +1320,35 @@ def puwei(nPU, correct_map, weights, syst=False):
                 ),
             )
     else:
+        # Legacy ROOT histos may be keyed as PU/PUup/PUdown instead of LUM/PUup/PUdown
+        if "LUM" in correct_map["LUM"]:
+            central_key = "LUM"
+        elif "PU" in correct_map["LUM"]:
+            central_key = "PU"
+        else:
+            raise KeyError("Pileup central value not found in correct_map['LUM']")
+        if "PUup" in correct_map["LUM"]:
+            up_key = "PUup"
+        elif "LUMup" in correct_map["LUM"]:
+            up_key = "LUMup"
+        else:
+            raise KeyError("Pileup up-variation not found in correct_map['LUM']")
+
+        if "PUdown" in correct_map["LUM"]:
+            down_key = "PUdown"
+        elif "LUMdown" in correct_map["LUM"]:
+            down_key = "LUMdown"
+        else:
+            raise KeyError("Pileup down-variation not found in correct_map['LUM']")
         if syst:
             weights.add(
                 "puweight",
-                correct_map["LUM"]["PU"](nPU),
-                correct_map["LUM"]["PUup"](nPU),
-                correct_map["LUM"]["PUdown"](nPU),
+                correct_map["LUM"][central_key](nPU),
+                correct_map["LUM"][up_key](nPU),
+                correct_map["LUM"][down_key](nPU),
             )
         else:
-            weights.add("puweight", correct_map["LUM"]["PU"](nPU))
+            weights.add("puweight", correct_map["LUM"][central_key](nPU))
 
 
 def btagSFs(jet, correct_map, weights, SFtype, syst=False):
