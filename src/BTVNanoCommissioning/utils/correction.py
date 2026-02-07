@@ -2107,29 +2107,40 @@ def add_pdf_weight(weights, pdf_weights, isSyst=False):
 
     # NNPDF31_nnlo_hessian_pdfas
     # https://lhapdfsets.web.cern.ch/current/NNPDF31_nnlo_hessian_pdfas/NNPDF31_nnlo_hessian_pdfas.info
-    if pdf_weights is not None and "306000 - 306102" in pdf_weights.__doc__:
+    #FIXME
+    # if pdf_weights is not None and "306000 - 306102" in pdf_weights.__doc__:
+    if pdf_weights is not None:
         # Hessian PDF weights
         # Eq. 21 of https://arxiv.org/pdf/1510.03865v1.pdf
-        arg = pdf_weights[:, 1:-2] - np.ones((len(weights.weight()), 100))
-        summed = ak.sum(np.square(arg), axis=1)
-        pdf_unc = np.sqrt((1.0 / 99.0) * summed)
-
-        # alpha_S weights
-        # Eq. 27 of same ref
-        as_unc = 0.5 * (pdf_weights[:, 102] - pdf_weights[:, 101])
-
-        # PDF + alpha_S weights
-        # Eq. 28 of same ref
-        pdfas_unc = np.sqrt(np.square(pdf_unc) + np.square(as_unc))
-        if isSyst != False:
-            weights.add("PDF_weight", nom, pdf_unc + nom)
-            weights.add("aS_weight", nom, as_unc + nom)
-            weights.add("PDFaS_weight", nom, pdfas_unc + nom)
-
+        try:
+            _ = pdf_weights[:, 1:-2] - np.ones((len(weights.weight()), 100))
+        except (ValueError, IndexError):
+            warnings.warn("PDF weights shape mismatch, using fallback")
+            weights.add("aS_weight", nom, up, down)
+            weights.add("PDF_weight", nom, up, down)
+            weights.add("PDFaS_weight", nom, up, down)
+        
         else:
-            weights.add("PDF_weight", nom)
-            weights.add("aS_weight", nom)
-            weights.add("PDFaS_weight", nom)
+            arg = pdf_weights[:, 1:-2] - np.ones((len(weights.weight()), 100))
+            summed = ak.sum(np.square(arg), axis=1)
+            pdf_unc = np.sqrt((1.0 / 99.0) * summed)
+
+            # alpha_S weights
+            # Eq. 27 of same ref
+            as_unc = 0.5 * (pdf_weights[:, 102] - pdf_weights[:, 101])
+
+            # PDF + alpha_S weights
+            # Eq. 28 of same ref
+            pdfas_unc = np.sqrt(np.square(pdf_unc) + np.square(as_unc))
+            if isSyst != False:
+                weights.add("PDF_weight", nom, pdf_unc + nom)
+                weights.add("aS_weight", nom, as_unc + nom)
+                weights.add("PDFaS_weight", nom, pdfas_unc + nom)
+
+            else:
+                weights.add("PDF_weight", nom)
+                weights.add("aS_weight", nom)
+                weights.add("PDFaS_weight", nom)
     else:
         warnings.warn("PDF weights are not available")
         weights.add("aS_weight", nom, up, down)
@@ -2523,8 +2534,8 @@ def weight_manager(pruned_ev, SF_map, isSyst):
                     top_pT_reweighting(pruned_ev.GenPart)
                     - ak.ones_like(top_pT_reweighting(pruned_ev.GenPart))
                 )
-                * 2.0,
-                ak.ones_like(top_pT_reweighting(pruned_ev.GenPart)),
+                * 2.0
+                + ak.ones_like(top_pT_reweighting(pruned_ev.GenPart)),
             )
 
     if "hadronFlavour" in pruned_ev.Jet.fields:
