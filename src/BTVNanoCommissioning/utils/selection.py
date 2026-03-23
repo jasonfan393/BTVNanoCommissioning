@@ -520,12 +520,14 @@ def wp_dict(year, campaign):
         "robustParticleTransformer": "RobustParTAK4",
         "particleNet": "PNet",
         "unifiedParticleTransformer": "UParTAK4",
+        "UParTAK4": "UParTAK4",
     }
 
     wps_dict = {}
-    if os.path.exists(
-        f"/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/BTV/{year}_{campaign}"
-    ):
+#    if os.path.exists(
+#        f"/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/BTV/{year}_{campaign}"
+#    ):
+    if False:
         btag = correctionlib.CorrectionSet.from_file(
             f"/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/BTV/{year}_{campaign}/btagging.json.gz"
         )
@@ -553,6 +555,27 @@ def wp_dict(year, campaign):
             }
         btag_wp_dict[cache_key] = wps_dict
         return wps_dict
+    elif "201" in campaign:
+        #FIXME temporary hack before json is put in proper location
+        btag = correctionlib.CorrectionSet.from_file(
+            f"/afs/cern.ch/user/j/jafan/work/public/sfb-tttnp/btv-scale-factors/UL{year}-NanoAODv15/json/btagging_v0.json.gz"
+        )
+        tagger_list = [i for i in list(btag.keys()) if "wp_values" in i]
+
+        if len(tagger_list) == 0:
+            btag_wp_dict[cache_key] = wps_dict
+            return wps_dict
+
+        for tagger in tagger_list:
+            wps_dict[name_map[tagger.replace("_wp_values", "")]] = {"b": {}, "c": {}}
+            # Get b WPs
+            bwp = btag[tagger].inputs[0].description.split("/")
+            wps_dict[name_map[tagger.replace("_wp_values", "")]]["b"] = {
+                wp: btag[tagger].evaluate(wp) for wp in bwp
+            }
+        btag_wp_dict[cache_key] = wps_dict
+        return wps_dict
+
 
     else:
         btag_wp_dict[cache_key] = wps_dict
@@ -560,7 +583,7 @@ def wp_dict(year, campaign):
 
 
 met_filters = {
-    "2016preVFP_UL": {
+    "2016preVFP-UL": {
         "data": [
             "goodVertices",
             "globalSuperTightHalo2016Filter",
@@ -580,7 +603,7 @@ met_filters = {
             "eeBadScFilter",
         ],
     },
-    "2016postVFP_UL": {
+    "2016postVFP-UL": {
         "data": [
             "goodVertices",
             "globalSuperTightHalo2016Filter",
@@ -602,7 +625,7 @@ met_filters = {
             "eeBadScFilter",
         ],
     },
-    "2017_UL": {
+    "2017-UL": {
         "data": [
             "goodVertices",
             "globalSuperTightHalo2016Filter",
@@ -628,7 +651,7 @@ met_filters = {
             "ecalBadCalibFilter",
         ],
     },
-    "2018_UL": {
+    "2018-UL": {
         "data": [
             "goodVertices",
             "globalSuperTightHalo2016Filter",

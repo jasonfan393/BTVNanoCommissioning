@@ -799,9 +799,9 @@ class NanoProcessor(processor.ProcessorABC):
             cat_number = 4
         elif re.search(r"DY|Wto|WW|WZ|ZZ", dataset):
             cat_number = 3
-        elif re.search(r"TTto|TT_", dataset):
+        elif re.search(r"TTto|TT_|TTTo", dataset):
             cat_number = 1
-        elif re.search(r"T[W-]|Tbar|TBbar", dataset):
+        elif re.search(r"T[W-]|Tbar|TBbar|ST", dataset):
             cat_number = 2
         else:
             raise RuntimeError(

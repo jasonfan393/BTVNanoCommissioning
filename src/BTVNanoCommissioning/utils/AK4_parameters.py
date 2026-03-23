@@ -38,10 +38,10 @@ correction_config = {
             "ele_Reco 2017 UL-Electron-ID-SF": "RecoAbove20",
         },
         "MUO": {
-            "mu_Reco 2017_UL": "NUM_TrackerMuons_DEN_genTracks",
-            "mu_HLT 2017_UL": "NUM_IsoMu27_DEN_CutBasedIdTight_and_PFIsoTight",
-            "mu_ID 2017_UL": "NUM_TightID_DEN_TrackerMuons",
-            "mu_Iso 2017_UL": "NUM_TightRelIso_DEN_TightIDandIPCut",
+            "mu_Reco 2017-UL": "NUM_TrackerMuons_DEN_genTracks",
+            "mu_HLT 2017-UL": "NUM_IsoMu27_DEN_CutBasedIdTight_and_PFIsoTight",
+            "mu_ID 2017-UL": "NUM_TightID_DEN_TrackerMuons",
+            "mu_Iso 2017-UL": "NUM_TightRelIso_DEN_TightIDandIPCut",
             "mu_ID_low *": "Efficiency_muon_trackerMuon_Run2017_UL_ID.histo.json",
             "mu_Reco_low *": "Efficiency_muon_generalTracks_Run2017_UL_trackerMuon.histo.json",
         },
@@ -64,9 +64,9 @@ correction_config = {
             "ele_Reco 2016preVFP UL-Electron-ID-SF": "RecoAbove20",
         },
         "MUO": {
-            "mu_Reco 2016preVFP_UL": "NUM_TrackerMuons_DEN_genTracks",
-            "mu_ID 2016preVFP_UL": "NUM_TightID_DEN_TrackerMuons",
-            "mu_Iso 2016preVFP_UL": "NUM_TightRelIso_DEN_TightIDandIPCut",
+            "mu_Reco 2016preVFP-UL": "NUM_TrackerMuons_DEN_genTracks",
+            "mu_ID 2016preVFP-UL": "NUM_TightID_DEN_TrackerMuons",
+            "mu_Iso 2016preVFP-UL": "NUM_TightRelIso_DEN_TightIDandIPCut",
         },
     },
     "2016postVFP-UL": {
@@ -107,9 +107,9 @@ correction_config = {
             "ele_Reco 2018 UL-Electron-ID-SF": "RecoAbove20",
         },
         "MUO": {
-            "mu_Reco 2018_UL": "NUM_TrackerMuons_DEN_genTracks",
-            "mu_ID 2018_UL": "NUM_TightID_DEN_TrackerMuons",
-            "mu_Iso 2018_UL": "NUM_TightRelIso_DEN_TightIDandIPCut",
+            "mu_Reco 2018-UL": "NUM_TrackerMuons_DEN_genTracks",
+            "mu_ID 2018-UL": "NUM_TightID_DEN_TrackerMuons",
+            "mu_Iso 2018-UL": "NUM_TightRelIso_DEN_TightIDandIPCut",
         },
     },
     "Winter22Run3": {
