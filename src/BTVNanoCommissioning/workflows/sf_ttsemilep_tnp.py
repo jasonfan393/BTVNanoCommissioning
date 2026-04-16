@@ -30,7 +30,7 @@ from BTVNanoCommissioning.helpers.definitions import get_discriminators, get_def
 
 
 def select_lepton(events, channel, campaign, iso_mode="tight"):
-    eta_cut = 2.5 if ("24" or "25" in campaign) else 2.4
+    eta_cut = 2.5 if (("24" in campaign) or ("25" in campaign)) else 2.4
     if channel == "mu":
         tight = (
             (events.Muon.pt > 30)
@@ -332,7 +332,8 @@ class NanoProcessor(processor.ProcessorABC):
         self._wp_table = wp_dict(year, campaign)
         self._all_taggers = sorted(self._wp_table.keys())
         self.tag_tagger = tag_tagger
-        self._regions = ["central", "sbiso", "sbbtagM", "sbbtagL", "sbisobtagM"]
+#        self._regions = ["central", "sbiso", "sbbtagM", "sbbtagL", "sbisobtagM"]
+        self._regions = ["central",  "sbbtagL", "sbbtagM"]
 
     @property
     def accumulator(self):
@@ -378,7 +379,7 @@ class NanoProcessor(processor.ProcessorABC):
         ptb_axis = Hist.axis.Variable(ptb_edges, name="ptb", label="$p_{T}(b)$ [GeV]")
 
         # objects for common kinematics
-        obj_list = ["MET", "mu"]
+        obj_list = ["MET", "mu","ele"]
         for i in range(4):
             obj_list.append(f"jet{i}")
 
@@ -530,6 +531,8 @@ class NanoProcessor(processor.ProcessorABC):
                 len(pruned_ev), "central", dtype="U20"
             )  # Up to 20 chars
 
+        print('SYSTEMATICS' , systematics)
+
         # Loop over the systematic variations
         for syst in systematics:
             if isSyst is False and syst != "nominal":
@@ -568,17 +571,17 @@ class NanoProcessor(processor.ProcessorABC):
                 if (
                     "ele" in ev.fields
                     and ("ele_" in histname)
-                    and (histname.replace(f"{region_prefix}_ele_", "") in ev.ele.fields)
+                    and (histname.replace(f"{region_prefix}_ele_", "") in ev.SelElectron.fields)
                 ):
                     fld = histname.replace(f"{region_prefix}_ele_", "")
-                    h.fill(syst, ak.to_numpy(ev.ele[fld]), weight=w)
+                    h.fill(syst, ak.to_numpy(ev.SelElectron[fld]), weight=w)
                     continue
 
                 # Selected muon histograms
                 if (
                     "mu" in ev.fields
                     and ("mu_" in histname)
-                    and (histname.replace(f"{region_prefix}_mu_", "") in ev.mu.fields)
+                    and (histname.replace(f"{region_prefix}_mu_", "") in ev.SelMuon.fields)
                 ):
                     fld = histname.replace(f"{region_prefix}_mu_", "")
                     h.fill(syst, ak.to_numpy(ev.mu[fld]), weight=w)
@@ -787,9 +790,9 @@ class NanoProcessor(processor.ProcessorABC):
             cat_number = 4
         elif re.search(r"DY|Wto|WW|WZ|ZZ", dataset):
             cat_number = 3
-        elif re.search(r"TTto|TT_", dataset):
+        elif re.search(r"TTto|TT_|TTTo", dataset):
             cat_number = 1
-        elif re.search(r"T[W-]|Tbar|TBbar", dataset):
+        elif re.search(r"T[W-]|Tbar|TBbar|ST", dataset):
             cat_number = 2
         else:
             raise RuntimeError(f"Unknown MC category for dataset '{dataset}'. ")
@@ -878,14 +881,14 @@ class NanoProcessor(processor.ProcessorABC):
             output = dump_lumi(events[req_lumi], output)
 
         # Triggers
-        triggers_mu = ["IsoMu24", "Mu50"]
-        triggers_el = ["Ele32_WPTight_Gsf", "Ele50_CaloIdVT_GsfTrkIdT_PFJet165"]
+        triggers_mu = ["IsoMu24"]
+        triggers_el = ["Ele30_WPTight_Gsf"]
         triggers = triggers_mu if self.channel == "mu" else triggers_el
         req_trig = HLT_helper(events, triggers)
 
         # MET filters
         req_metf = MET_filters(events, self._campaign)
-        eta_cut = 2.5 if ("24" or "25" in self._campaign) else 2.4
+        eta_cut = 2.5 if (("24" in self._campaign) or ("25" in self._campaign)) else 2.4
 
         # Loose veto objects
         mu_loose = (
@@ -964,7 +967,8 @@ class NanoProcessor(processor.ProcessorABC):
             return np.sqrt(ak.where(arg > 0, arg, 0.0))
 
         # Loop over isolation modes
-        for iso_mode in ["tight", "sbiso"]:
+#        for iso_mode in ["tight", "sbiso"]:
+        for iso_mode in ["tight"]:
             sel_leps, sel_mask = select_lepton(
                 events, self.channel, self._campaign, iso_mode=iso_mode
             )
@@ -1262,9 +1266,9 @@ class NanoProcessor(processor.ProcessorABC):
                 pr = ak.with_field(pr, jets_r[:, :4], "SelJet")
 
                 if self.channel == "mu":
-                    pr = ak.with_field(pr, lep_r, "mu")
+                    pr = ak.with_field(pr, lep_r, "SelMuon")
                 else:
-                    pr = ak.with_field(pr, lep_r, "ele")
+                    pr = ak.with_field(pr, lep_r, "SelElectron")
 
                 pr = ak.with_field(pr, ak.num(pr.SelJet, axis=1), "njet")
                 pr = ak.with_field(pr, tlep_mass_full[rmask_np], "tlep_mass")
