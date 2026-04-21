@@ -321,6 +321,7 @@ correction_config = {
                 "SmearAndSyst",
             ],
         },
+<<<<<<< HEAD
         "tt_dilep": {
             "MUO": {
                 "mu_ID": "NUM_TightID_DEN_TrackerMuons",
@@ -331,6 +332,24 @@ correction_config = {
                 "ele_ID 2024Prompt Electron-ID-SF": "PromptMVA-Tight",
             },
         },
+=======
+        "jetveto": {"Summer24Prompt24_RunBCDEFGHI_V1": "jetvetomap"},
+        "MUO": {
+            "mu_Trig" : "NUM_IsoMu24_DEN_CutBasedIdTight_and_PFIsoTight",
+            "mu_ID": "NUM_TightID_DEN_TrackerMuons",
+            "mu_Iso": "NUM_TightPFIso_DEN_TightID",
+        },
+        "EGM": {
+            "ele_Trig 2024 Electron-HLT-SF" : "HLT_SF_Ele30_MVAiso80ID",
+            "ele_Reco 2024 Electron-ID-SF": "",
+            "ele_ID 2024 Electron-ID-SF": "wp80iso",
+        },
+        "muonSS": "",
+        "electronSS": [
+            "Scale",
+            "SmearAndSyst",
+        ],
+>>>>>>> 5068ec3 (update ele SFs)
     },
     "Prompt25": {
         "default": {
