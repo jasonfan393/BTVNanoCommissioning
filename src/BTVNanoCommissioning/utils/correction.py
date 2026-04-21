@@ -1858,45 +1858,46 @@ def MUO_shifts(shifts, correct_map, events, isRealData, systematic=False):
             mu_resol_up["pt"] = mu_pt_corr_resolup
             mu_resol_down["pt"] = mu_pt_corr_resoldown
 
-        shifts += [
-            (
-                {
-                    "Jet": shifts[0][0]["Jet"],
-                    "MET": shifts[0][0]["MET"],
-                    "Muon": mu_up,
-                },
-                "MuonScaleUp",
-            )
-        ]
-        shifts += [
-            (
-                {
-                    "Jet": shifts[0][0]["Jet"],
-                    "MET": shifts[0][0]["MET"],
-                    "Muon": mu_down,
-                },
-                "MuonScaleDown",
-            )
-        ]
-        shifts += [
-            (
-                {
-                    "Jet": shifts[0][0]["Jet"],
-                    "MET": shifts[0][0]["MET"],
-                    "Muon": mu_resol_up,
-                },
-                "MuonResolUp",
-            )
-        ]
-        shifts += [
-            (
-                {
-                    "Jet": shifts[0][0]["Jet"],
-                    "MET": shifts[0][0]["MET"],
-                    "Muon": mu_resol_down,
-                },
-                "MuonResolDown",
-            )
+            #FIXME Don't load this in for data? 
+            shifts += [
+                (
+                    {
+                        "Jet": shifts[0][0]["Jet"],
+                        "MET": shifts[0][0]["MET"],
+                        "Muon": mu_up,
+                    },
+                    "MuonScaleUp",
+                )
+            ]
+            shifts += [
+                (
+                    {
+                        "Jet": shifts[0][0]["Jet"],
+                        "MET": shifts[0][0]["MET"],
+                        "Muon": mu_down,
+                    },
+                    "MuonScaleDown",
+                )
+            ]
+            shifts += [
+                (
+                    {
+                        "Jet": shifts[0][0]["Jet"],
+                        "MET": shifts[0][0]["MET"],
+                        "Muon": mu_resol_up,
+                    },
+                    "MuonResolUp",
+                )
+            ]
+            shifts += [
+                (
+                    {
+                        "Jet": shifts[0][0]["Jet"],
+                        "MET": shifts[0][0]["MET"],
+                        "Muon": mu_resol_down,
+                    },
+                    "MuonResolDown",
+                )
         ]
 
     return shifts
@@ -3805,15 +3806,15 @@ def common_shifts(self, events):
             ]
 
     if "roccor" in self.SF_map.keys():
-        shifts = Roccor_shifts(shifts, self.SF_map, events, isRealData, False)
+        shifts = Roccor_shifts(shifts, self.SF_map, events, isRealData, self.isSyst)
     elif "muonSS" in self.SF_map.keys():
-        shifts = MUO_shifts(shifts, self.SF_map, events, isRealData, False)
+        shifts = MUO_shifts(shifts, self.SF_map, events, isRealData, self.isSyst)
     else:
         for shift in shifts:
             shift[0]["Muon"] = events.Muon
 
     if "electronSS" in self.SF_map.keys():
-        shifts = EGM_shifts(shifts, self.SF_map, events, isRealData, False)
+        shifts = EGM_shifts(shifts, self.SF_map, events, isRealData, self.isSyst)
     else:
         for shift in shifts:
             shift[0]["Electron"] = events.Electron
@@ -3893,9 +3894,9 @@ def weight_manager(pruned_ev, SF_map, isSyst, ttbar_reweights=None, campaign=Non
                 syst_wei,
             )
         if "MUO" in SF_map.keys() and "SelMuon" in pruned_ev.fields:
-            muSFs(pruned_ev.SelMuon, SF_map, weights, syst_wei, False)
+            muSFs(pruned_ev.SelMuon, SF_map, weights, syst_wei, True)
         if "EGM" in SF_map.keys() and "SelElectron" in pruned_ev.fields:
-            eleSFs(pruned_ev.SelElectron, SF_map, weights, syst_wei, False)
+            eleSFs(pruned_ev.SelElectron, SF_map, weights, syst_wei, True)
         if "BTV" in SF_map.keys() and "SelJet" in pruned_ev.fields:
             btagSFs(pruned_ev.SelJet, SF_map, weights, "DeepJetC", syst_wei)
             btagSFs(pruned_ev.SelJet, SF_map, weights, "DeepJetB", syst_wei)
