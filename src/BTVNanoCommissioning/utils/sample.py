@@ -101,27 +101,6 @@ predefined_sample = {
         ],
         "minor_MC": ["TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8"],
     },
-    "DY_sfl": {
-        "data": ["DoubleMuon", "SingleMuon", "Muon", "Muon0", "Muon1"],
-        "MC": [
-            # "DYJetsToLL_M-50_TuneCP5_13TeV-madgraphMLM-pythia8",
-            "DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8",
-            "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8",
-            "DYto2L-2Jets_MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8",
-            "DYto2Mu-4Jets_Bin-MLL-50_TuneCP5_13p6TeV_madgraphMLM-pythia8",
-            "DYto2E-4Jets_Bin-MLL-50_TuneCP5_13p6TeV_madgraphMLM-pythia8",
-        ],
-        "minor_MC": ["TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8"],
-    },
-    "eDY_sfl": {
-        "data": ["EGamma", "EGamma0", "EGamma1"],
-        "MC": [
-            "DYto2L-2Jets_MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8",
-            "DYto2Mu-4Jets_Bin-MLL-50_TuneCP5_13p6TeV_madgraphMLM-pythia8",
-            "DYto2E-4Jets_Bin-MLL-50_TuneCP5_13p6TeV_madgraphMLM-pythia8",
-        ],
-        "minor_MC": ["TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8"],
-    },
     "emctag_ttdilep_sf": {
         "data": ["MuonEG"],
         "MC": ["TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8"],
@@ -226,6 +205,31 @@ predefined_sample = {
             "TTto4Q_TuneCP5_13p6TeV_powheg-pythia8",
             "TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8",
             "TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8",
+
+            #Run2 Samples:
+            "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8",
+            "TTToHadronic_TuneCP5_13TeV-powheg-pythia8",
+            "TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8",
+
+            "ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8",
+            "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8",
+            "ST_s-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8",
+
+            "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8",
+
+            "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8",
+            "DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8",
+
+            "QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+            "QCD_Pt-50To80_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+            "QCD_Pt-80To120_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+            "QCD_Pt-120To170_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+            "QCD_Pt-170To300_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+            "QCD_Pt-300To470_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+            "QCD_Pt-470To600_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+            "QCD_Pt-600To800_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+            "QCD_Pt-800To1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+            "QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
         ],
         "syst_MC": [
             "TTto2L2Nu_MT-171p5_TuneCP5_13p6TeV_powheg-pythia8",
