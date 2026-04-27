@@ -6,7 +6,7 @@ import json
 import os
 import re
 import warnings
-
+import sys
 import numpy as np
 import awkward as ak
 import uproot
@@ -326,7 +326,7 @@ def load_SF(year, campaign, selMod="default", syst=False):
                 correct_map["muonSS"] = correctionlib.CorrectionSet.from_file(_mu_path)
         elif SF == "electronSS":
             _eless_cvmfs = _cvmfs_dir(campaign, "electronSS")
-            _ele_path = f"/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/{_eless_cvmfs}/latest/electronSS_EtDependent{'_v1' if year == '2024' else ''}.json.gz"
+            _ele_path = f"/cvmfs/cms-griddata.cern.ch/cat/metadata/EGM/{_eless_cvmfs}/latest/electronSS_EtDependent.json.gz"
             if not os.path.exists(_ele_path):
                 _ele_path = f"src/BTVNanoCommissioning/data/EGM/{_eless_cvmfs}/latest/electronSS_EtDependent.json.gz"
             if os.path.exists(_ele_path):
@@ -951,6 +951,7 @@ def JME_shifts(
     if not isRealData and systematic != False:
         jerc_id_arr = systematic.split("_")
         jes_sources = get_JES_keys(jes_year)
+        #????????
         if len(jerc_id_arr) >= 2 and jerc_id_arr[0] == "JEC":
             jes_sources_id = jerc_id_arr[1]
         else:
@@ -960,7 +961,9 @@ def JME_shifts(
             jer_split_id = jerc_id_arr[3]
         else:
             jer_split_id = "total"  # Default case
-
+        #FIXME
+        jer_split_id = "split"
+        #
     jecname = ""
     if "JME" in correct_map.keys():
         ## correctionlib
@@ -1817,7 +1820,6 @@ def EGM_shifts(shifts, correct_map, events, isRealData, systematic=False):
     Adapted from this example of electron SS correction usage:
     https://gitlab.cern.ch/cms-analysis-corrections/EGM/examples/-/blob/latest/egmScaleAndSmearingExample.py
     """
-
     ele = events.Electron
     n_ele = ak.num(ele)
     events_run = ak.flatten(ak.broadcast_arrays(events.run, ele.eta)[0])
@@ -3201,7 +3203,7 @@ def common_shifts(self, events):
             shift[0]["Muon"] = events.Muon
 
     if "electronSS" in self.SF_map.keys():
-        shifts = EGM_shifts(shifts, self.SF_map, events, isRealData, self.isSyst)
+       shifts = EGM_shifts(shifts, self.SF_map, events, isRealData, self.isSyst)
     else:
         for shift in shifts:
             shift[0]["Electron"] = events.Electron

@@ -49,6 +49,7 @@ xsection = [
         "DAS": "/TTTo2J1L1Nu_CP5_13p6TeV_powheg-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM",
         "energy": "13.6",
     },
+    {
         "id": "63e22ec22946177d33a75cb3",
         "process_name": "DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8",
         "cross_section": "20460.0",
@@ -182,6 +183,7 @@ xsection = [
         "cross_section": "2.244e+03",
         "total_uncertainty": "9.799e+00",
         "DAS": "/DYto2E-2Jets_Bin-MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/RunIII2024Summer24MiniAOD-140X_mcRun3_2024_realistic_v26-v4/MINIAODSIM",
+    },
     {
         "process_name": "TTToSemiLeptonic_TuneCP5_13p6TeV-powheg-pythia8",
         "cross_section": "404.0",
@@ -1218,7 +1220,8 @@ xsection = [
     {
         "DAS": "/QCD_PT-15to30_TuneCP5_13p6TeV_pythia8/Run3Summer22MiniAODv3-124X_mcRun3_2022_realistic_v12-v2/MINIAODSIM",
         "comments": "Automatically computed",
-<<<<<<< HEAD
+        "shower": "Pythia8",
+        "MCM": "JME-Run3Summer22MiniAODv3-01052",
         "process_name": "QCD_PT-15to30_TuneCP5_13p6TeV_pythia8",
         "accuracy": "unknown",
         "cross_section": "1301000000.0",
@@ -1227,7 +1230,6 @@ xsection = [
         "equivalent_lumi": "7.684e-07",
         "fraction_negative_weight": "0.0",
         "matrix_generator": "none",
-=======
     },
     {
         "id": "68d11209f8a546d59c3d88ef",
@@ -1365,9 +1367,6 @@ xsection = [
         "MCM": "GEN-RunIII2024Summer24MiniAOD-00087",
         "equivalent_lumi": "0.1836",
         "fraction_negative_weight": "0",
->>>>>>> f06b838 (update corrections for lepton uncertainties. Update samples for run 2)
-        "shower": "Pythia8",
-        "MCM": "JME-Run3Summer22MiniAODv3-01052",
     },
     {
         "DAS": "/QCD_PT-30to50_TuneCP5_13p6TeV_pythia8/Run3Summer22MiniAODv3-124X_mcRun3_2022_realistic_v12-v2/MINIAODSIM",
@@ -1956,5 +1955,5 @@ xsection = [
         "accuracy": "LO",
         "energy": "13.6",
         "comment": "GenXSecAnalyzer",
-    },
+    }
 ]
