@@ -398,6 +398,7 @@ def plot_systs(
     axis_nom["syst"] = "nominal"
 
     # Get nominal MC and data histograms
+    print(h_mc.axes["syst"])
     h_mc_nom = h_mc[axis_nom]
     if "top_pt" not in var:  # data is empty for top_pt and antitop_pt
         h_data = h_data[axis_nom]

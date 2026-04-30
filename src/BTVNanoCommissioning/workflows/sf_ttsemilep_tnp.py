@@ -571,7 +571,7 @@ class NanoProcessor(processor.ProcessorABC):
 
                 # Selected electron histograms
                 if (
-                    "ele" in ev.fields
+                    "SelElectron" in ev.fields
                     and ("ele_" in histname)
                     and (histname.replace(f"{region_prefix}_ele_", "") in ev.SelElectron.fields)
                 ):
@@ -581,12 +581,12 @@ class NanoProcessor(processor.ProcessorABC):
 
                 # Selected muon histograms
                 if (
-                    "mu" in ev.fields
+                    "SelMuon" in ev.fields
                     and ("mu_" in histname)
                     and (histname.replace(f"{region_prefix}_mu_", "") in ev.SelMuon.fields)
                 ):
                     fld = histname.replace(f"{region_prefix}_mu_", "")
-                    h.fill(syst, ak.to_numpy(ev.mu[fld]), weight=w)
+                    h.fill(syst, ak.to_numpy(ev.SelMuon[fld]), weight=w)
                     continue
 
                 # njet

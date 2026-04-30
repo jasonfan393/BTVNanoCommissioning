@@ -951,7 +951,6 @@ def JME_shifts(
     if not isRealData and systematic != False:
         jerc_id_arr = systematic.split("_")
         jes_sources = get_JES_keys(jes_year)
-        #????????
         if len(jerc_id_arr) >= 2 and jerc_id_arr[0] == "JEC":
             jes_sources_id = jerc_id_arr[1]
         else:
@@ -961,7 +960,7 @@ def JME_shifts(
             jer_split_id = jerc_id_arr[3]
         else:
             jer_split_id = "total"  # Default case
-        #FIXME
+        #FIXME this is a hack to get around syst = all
         jer_split_id = "split"
         #
     jecname = ""
