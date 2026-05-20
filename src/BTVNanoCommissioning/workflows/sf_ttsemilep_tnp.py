@@ -77,23 +77,63 @@ def solve_nu_pz(px_l, py_l, pz_l, e_l, px_n, py_n, mW=80.4):
     b = -2.0 * muW * pz_l
     c = e_l**2 * (px_n**2 + py_n**2) - muW**2
     disc = b**2 - 4.0 * a * c
+
+    # real solution case
     disc_pos = ak.where(disc > 0, disc, 0.0)
     sqrt_disc = np.sqrt(disc_pos)
     pz1 = (-b + sqrt_disc) / (2.0 * a)
     pz2 = (-b - sqrt_disc) / (2.0 * a)
-    e1 = np.sqrt(px_n**2 + py_n**2 + pz1**2)
-    e2 = np.sqrt(px_n**2 + py_n**2 + pz2**2)
-    return (pz1, e1), (pz2, e2)
 
+    # imaginary case: rescale MET (x,y independently) to satisfy W mass constraint
+    # following nucal gradient descent on scaling factors
+    C  = (pz_l / e_l)**2 - 1.0
+    x, y = ak.ones_like(px_l), ak.ones_like(py_l)
+    step = 0.1
+    for _ in range(10):
+        tltn_xy = px_l*px_n*x + py_l*py_n*y
+        muW_xy  = (mW**2)/2.0 + tltn_xy
+        pz_xy   = -0.5/C * ((mW/e_l)**2 * pz_l + 2.0*pz_l/e_l**2 * tltn_xy)
+        # W mass residual U
+        As  = 0.25*((mW**2*pz_l/e_l**2)**2/C - (mW/e_l)**2)
+        Bsx = ((mW*pz_l/e_l**2)**2/C - (mW/e_l)**2) * px_l*px_n
+        Bsy = ((mW*pz_l/e_l**2)**2/C - (mW/e_l)**2) * py_l*py_n
+        Csxx = ((pz_l/e_l**2)**2/C - 1.0/e_l**2)*(px_l*px_n)**2 + px_n**2
+        Csxy = ((pz_l/e_l**2)**2/C - 1.0/e_l**2)*2.0*px_l*px_n*py_l*py_n
+        Csyy = ((pz_l/e_l**2)**2/C - 1.0/e_l**2)*(py_l*py_n)**2 + py_n**2
+        As  = As  / C
+        Bsx = Bsx / C
+        Bsy = Bsy / C
+        Csxx = Csxx / C
+        Csxy = Csxy / C
+        Csyy = Csyy / C
+        U  = As + x*Bsx + y*Bsy + x**2*Csxx + x*y*Csxy + y**2*Csyy
+        dx = Bsx + 2.0*Csxx*x + Csxy*y
+        dy = Bsy + 2.0*Csyy*y + Csxy*x
+        norm = np.sqrt(dx**2 + dy**2 + 1e-10)
+        x = x + step*dx/norm
+        y = y + step*dy/norm
+        step = ak.where(U * (As + x*Bsx + y*Bsy + x**2*Csxx + x*y*Csxy + y**2*Csyy) < 0, -0.5*step, step)
 
+    px_n_imag = px_n * x
+    py_n_imag = py_n * y
+    muW_imag  = (mW**2)/2.0 + px_l*px_n_imag + py_l*py_n_imag
+    pz_imag   = -0.5/C * ((mW/e_l)**2 * pz_l + 2.0*pz_l/e_l**2 * (px_l*px_n_imag + py_l*py_n_imag))
+    e_imag    = np.sqrt(px_n_imag**2 + py_n_imag**2 + pz_imag**2)
+
+    # select between real and imaginary solutions
+    pz1_out = ak.where(disc > 0, pz1, pz_imag)
+    pz2_out = ak.where(disc > 0, pz2, pz_imag)
+    e1_out  = ak.where(disc > 0, np.sqrt(px_n**2 + py_n**2 + pz1**2), e_imag)
+    e2_out  = ak.where(disc > 0, np.sqrt(px_n**2 + py_n**2 + pz2**2), e_imag)
+
+    return (pz1_out, e1_out), (pz2_out, e2_out)
 # open histograms of top/W mass distribution used for likelihood calculation
 tf = uproot.open("src/BTVNanoCommissioning/helpers/sf_ttsemilep_likelihoods_pas.root")
-
+# print axis ranges and peak locations
 h2 = tf["had_tmwm"]
 x_edges = h2.axis(0).edges()
 y_edges = h2.axis(1).edges()
 z_2d = h2.values().T
-
 h1 = tf["had_mnu"]
 nu_edges = h1.axis().edges()
 z_1d = h1.values()
@@ -133,7 +173,6 @@ def interp2d(xaxis, yaxis, zgrid, x, y):
     u = (y - y1) / (y2 - y1)
     return (1 - t) * (1 - u) * z11 + t * (1 - u) * z21 + (1 - t) * u * z12 + t * u * z22
 
-
 def calculate_mass_probability(m_type, masses):
     if m_type == "W, T":
         mW_val, mT_val = masses[0], masses[1]
@@ -144,10 +183,9 @@ def calculate_mass_probability(m_type, masses):
     elif m_type == "T":
         mTlep_val = np.clip(masses[0], cnu[0], cnu[-1])
         prob = interp1d(cnu, z_1d, mTlep_val)
-        return np.maximum(prob, 1e-24)
+        return np.maximum(prob, 1e-6)
     else:
         raise ValueError("Not a valid mass distribution")
-
 
 def ttbar_reco(jets, lepton, met, maxjets=6, mW=80.4, mT=172.5, sig_w=30.0, sig_t=40.0):
     # limit jets
@@ -196,7 +234,6 @@ def ttbar_reco(jets, lepton, met, maxjets=6, mW=80.4, mT=172.5, sig_w=30.0, sig_
     (pz1, en1), (pz2, en2) = solve_nu_pz(
         lep_px, lep_py, lep_pz, lep_e, met_x, met_y, mW
     )
-
     def four(e, px, py, pz):
         return (e, px, py, pz)
 
@@ -225,7 +262,7 @@ def ttbar_reco(jets, lepton, met, maxjets=6, mW=80.4, mT=172.5, sig_w=30.0, sig_
     tlep_py = ak.where(choose_1, t1[2], t2[2])
     tlep_pz = ak.where(choose_1, t1[3], t2[3])
     m_tlep = ak.where(choose_1, m_tlep1, m_tlep2)
-    valid_dnu = (m_tlep > 100.0) & (m_tlep < 240.0)
+    valid_dnu = (m_tlep > 100) & (m_tlep < 240)
     # had side
     W_px, W_py, W_pz = JA.px + JB.px, JA.py + JB.py, JA.pz + JB.pz
     W_e = JA.energy + JB.energy
@@ -238,16 +275,19 @@ def ttbar_reco(jets, lepton, met, maxjets=6, mW=80.4, mT=172.5, sig_w=30.0, sig_
     th_px, th_py, th_pz = BH.px + W_px, BH.py + W_py, BH.pz + W_pz
     th_e = BH.energy + W_e
     mT_h = m(th_e, th_px, th_py, th_pz)
-
+    min_mT_h = ak.to_numpy(ak.min(mT_h, axis=1))
+    bins = np.linspace(0, 600, 31)
+    counts, edges = np.histogram(min_mT_h, bins=bins)
     P_m2_m3 = calculate_mass_probability("W, T", [mW_h, mT_h])
     P_m_t1 = calculate_mass_probability("T", [m_tlep])
+    valid_combo = P_m2_m3 > 1e-24
 
     neg_log_lambda = ak.where(valid_dnu, -np.log(P_m2_m3 * P_m_t1), np.inf)
+    neg_log_lambda = ak.where(valid_combo, neg_log_lambda, np.inf)
     best_idx = ak.where(has_cand, ak.argmin(neg_log_lambda, axis=1), -1)
     li = ak.local_index(neg_log_lambda, axis=1)
     best_mask = (li == best_idx) & (best_idx >= 0)
 
-    # pick best objects
     best = {
         "has_cand": has_cand,
         "best_mask": best_mask,
@@ -533,7 +573,6 @@ class NanoProcessor(processor.ProcessorABC):
                 len(pruned_ev), "central", dtype="U20"
             )  # Up to 20 chars
 
-        print('SYSTEMATICS' , systematics)
 
         # Loop over the systematic variations
         for syst in systematics:
@@ -799,56 +838,6 @@ class NanoProcessor(processor.ProcessorABC):
         else:
             raise RuntimeError(f"Unknown MC category for dataset '{dataset}'. ")
 
-        # define sig from gen-level
-        if cat_number == 1:
-            genpart = events.GenPart[events.GenPart.hasFlags("isHardProcess")]
-
-            tops = genpart[genpart.pdgId == 6]
-            antitops = genpart[genpart.pdgId == -6]
-
-            b_from_top = genpart[
-                (abs(genpart.pdgId) == 5)
-                & (abs(ak.fill_none(genpart.parent.pdgId, 0)) == 6)
-            ]
-
-            w_from_top = genpart[
-                (abs(genpart.pdgId) == 24)
-                & (abs(ak.fill_none(genpart.parent.pdgId, 0)) == 6)
-            ]
-
-            gen_charged_leptons = genpart[
-                ((abs(genpart.pdgId) == 11) | (abs(genpart.pdgId) == 13))
-                & (abs(ak.fill_none(genpart.parent.pdgId, 0)) == 24)
-            ]
-
-            gen_neutrinos = genpart[
-                ((abs(genpart.pdgId) == 12) | (abs(genpart.pdgId) == 14))
-                & (abs(ak.fill_none(genpart.parent.pdgId, 0)) == 24)
-            ]
-
-            gen_quarks_from_w = genpart[
-                (abs(genpart.pdgId) <= 5)
-                & (abs(ak.fill_none(genpart.parent.pdgId, 0)) == 24)
-            ]
-
-            has_2b = ak.num(b_from_top, axis=1) == 2
-
-            n_clep = ak.num(gen_charged_leptons, axis=1)
-            n_nu = ak.num(gen_neutrinos, axis=1)
-            n_q = ak.num(gen_quarks_from_w, axis=1)
-
-            gen_is_complete = has_2b & (n_clep == 1) & (n_nu == 1) & (n_q == 2)
-
-            events = ak.with_field(events, gen_is_complete, "gen_ttbar_is_complete")
-
-            events = ak.with_field(events, gen_charged_leptons, "gen_lepton")
-            events = ak.with_field(events, gen_neutrinos, "gen_neutrino")
-            events = ak.with_field(events, b_from_top, "gen_b_from_top")
-            events = ak.with_field(events, gen_quarks_from_w, "gen_quarks_from_w")
-        else:
-            events = ak.with_field(
-                events, ak.zeros_like(events.run, dtype=bool), "gen_ttbar_is_complete"
-            )
 
         output = {} if self.noHist else self.define_histograms(events)
         # print(f"=== process_shift: {dataset}, shift={shift_name}, isData={isRealData}, n={len(events)} ===")
@@ -897,12 +886,12 @@ class NanoProcessor(processor.ProcessorABC):
         mu_loose = (
             (events.Muon.pt > 15)
             & (abs(events.Muon.eta) < eta_cut)
-            & mu_idiso(events, self._campaign)
+            & mu_promptmvaid(events, self._campaign)
         )
         el_loose = (
             (events.Electron.pt > 15)
             & (abs(events.Electron.eta) < eta_cut)
-            & ele_mvatightid(events, self._campaign)
+            & ele_promptmvaid(events, self._campaign)
         )
 
         # Jet cleaning
@@ -918,7 +907,7 @@ class NanoProcessor(processor.ProcessorABC):
             clean_el = ak.where(
                 has_el, ak.all(dr_el > 0.4, axis=-1, mask_identity=True), all_true
             )
-            base_jet_mask = jet_id(ev, self._campaign, max_eta=eta_cut, min_pt=25)
+            base_jet_mask = jet_id(ev, self._campaign, max_eta=eta_cut, min_pt=30)#FIXME min_pt change
             return ak.fill_none(base_jet_mask & clean_mu & clean_el, False, axis=-1)
 
         # Cutflow helper
@@ -1163,52 +1152,63 @@ class NanoProcessor(processor.ProcessorABC):
 
             kinbin_full = (mTW_l_bin * 8 + neg_log_lambda_bin).astype(np.int32)
 
-            # Truth category once
-            if "gen_ttbar_is_complete" in ev_base.fields:
-                gen_complete = ev_base.gen_ttbar_is_complete
-            else:
-                gen_complete = ak.zeros_like(len(ev_base), dtype=bool)
-
+            # GEN MATCHING:
             if cat_number == 1:
+                genpart_all = ev_base.GenPart
+                genpart = genpart_all[genpart_all.hasFlags("isHardProcess")]
 
-                gen_bs = ev_base.gen_b_from_top
-                gen_charged_lep = ev_base.gen_lepton
-                gen_qs = ev_base.gen_quarks_from_w
+                b_from_top = genpart[
+                    (abs(genpart.pdgId) == 5)
+                    & (abs(ak.fill_none(genpart.parent.pdgId, 0)) == 6)
+                ]
+                gen_charged_leptons = genpart[
+                    ((abs(genpart.pdgId) == 11) | (abs(genpart.pdgId) == 13))
+                    & (abs(ak.fill_none(genpart.parent.pdgId, 0)) == 24)
+                ]
+                gen_quarks_from_w = genpart[
+                    (abs(genpart.pdgId) <= 4)
+                    & (abs(genpart.pdgId) >= 1)
+                    & (abs(ak.fill_none(genpart.parent.pdgId, 0)) == 24)
+                ]
 
-                gen_bs = ak.pad_none(gen_bs, 2, axis=1)
-                gen_qs = ak.pad_none(gen_qs, 2, axis=1)
-                gen_charged_lep = ak.pad_none(gen_charged_lep, 1, axis=1)
+                has_2b   = ak.num(b_from_top, axis=1) == 2
+                n_clep   = ak.num(gen_charged_leptons, axis=1)
+                n_q      = ak.num(gen_quarks_from_w, axis=1)
+                gen_complete = has_2b & (n_clep == 1) & (n_q == 2)
 
-                dr = 0.2
+                gen_charged_lep = ak.pad_none(gen_charged_leptons, 1, axis=1)
+                lepton_pdgId    = gen_charged_lep[:, 0].pdgId
+                b_lep_pdgId     = -np.sign(lepton_pdgId) * 5
+                b_had_pdgId     =  np.sign(lepton_pdgId) * 5
 
+                gen_b_lep = b_from_top[b_from_top.pdgId == b_lep_pdgId]
+                gen_b_had = b_from_top[b_from_top.pdgId == b_had_pdgId]
+                gen_b_lep = ak.pad_none(gen_b_lep, 1, axis=1)
+                gen_b_had = ak.pad_none(gen_b_had, 1, axis=1)
+                gen_qs    = ak.pad_none(gen_quarks_from_w, 2, axis=1)
+
+                dr = 0.4
                 def get_dr(reco, gen):
                     return ak.fill_none(reco.delta_r(gen), 99.0)
 
-                match_blep_A = get_dr(BL, gen_bs[:, 0]) < dr
-                match_blep_B = get_dr(BL, gen_bs[:, 1]) < dr
-
-                match_bhad_A = get_dr(BH, gen_bs[:, 1]) < dr
-                match_bhad_B = get_dr(BH, gen_bs[:, 0]) < dr
-
+                match_bhad = get_dr(BH, gen_b_had[:, 0]) < dr
+                match_blep = get_dr(BL, gen_b_lep[:, 0]) < dr
                 match_llep = get_dr(lep_base, gen_charged_lep[:, 0]) < dr
 
                 dr_ja_q0 = get_dr(JA, gen_qs[:, 0])
                 dr_ja_q1 = get_dr(JA, gen_qs[:, 1])
                 dr_jb_q0 = get_dr(JB, gen_qs[:, 0])
                 dr_jb_q1 = get_dr(JB, gen_qs[:, 1])
-
                 w_match_1 = (dr_ja_q0 < dr) & (dr_jb_q1 < dr)
                 w_match_2 = (dr_ja_q1 < dr) & (dr_jb_q0 < dr)
-
                 match_whad = w_match_1 | w_match_2
 
-                scenario_1 = match_blep_A & match_bhad_A & match_llep & match_whad
-
-                scenario_2 = match_blep_B & match_bhad_B & match_llep & match_whad
-
-                is_correct_kin = scenario_1 | scenario_2
-
+                is_correct_kin = match_bhad & match_blep & match_llep & match_whad
                 is_sig = gen_complete & is_correct_kin
+
+                bmask_M_base = btag_wp(jets_base, self._year, self._campaign, tagger=self.tag_tagger, borc="b", wp="M")
+                has_2M = ak.sum(ak.fill_none(bmask_M_base, False), axis=1) >= 2
+                gc2m = gen_complete & has_2M
             else:
                 is_sig = ak.Array(np.zeros(len(ev_base), dtype=bool))
 
@@ -1230,18 +1230,19 @@ class NanoProcessor(processor.ProcessorABC):
                 rmask_np = ak.to_numpy(ak.fill_none(rmask, False)) & log_lambda_mask
                 if not np.any(rmask_np):
                     continue
-
-                # TnP fills
-                # Note that regions as defined are not mutually exclusive, unless you are looking
-                # at the Tnp_yields
+                #FIXME cleaning up for readability
                 require_tag = rname == "central"
                 ones = ak.ones_like(had_pt_ok, dtype=bool)
-                tnp_had_fill = ak.to_numpy(
-                    had_pt_ok & (lep_tag if require_tag else (lep_tag_L & (~lep_tag)))
-                )[rmask_np]
-                tnp_lep_fill = ak.to_numpy(
-                    lep_pt_ok & (had_tag if require_tag else (had_tag_L & (~had_tag)))
-                )[rmask_np]
+                if rname == "central":
+                    tnp_had_fill = ak.to_numpy(had_pt_ok & (lep_tag))[rmask_np]
+                    tnp_lep_fill = ak.to_numpy(lep_pt_ok & (had_tag))[rmask_np]
+                elif rname == "sbbtagM":
+                    tnp_had_fill = ak.to_numpy(had_pt_ok & (lep_tag_L & ~lep_tag))[rmask_np]
+                    tnp_lep_fill = ak.to_numpy(lep_pt_ok & (had_tag_L & ~had_tag))[rmask_np]
+                else: #rname = sbbtagL
+                    tnp_had_fill = ak.to_numpy(had_pt_ok & (~lep_tag & ~lep_tag_L))[rmask_np]
+                    tnp_lep_fill = ak.to_numpy(lep_pt_ok & (~had_tag & ~had_tag_L))[rmask_np]
+
                 tnp_had_pt = ak.to_numpy(BH.pt)[rmask_np]
                 tnp_lep_pt = ak.to_numpy(BL.pt)[rmask_np]
 

@@ -166,6 +166,20 @@ correction_config = {
                 "jetveto": "Run2-2018-UL-NanoAODv15",
             },
         },
+        "tt_semilep_mu": {
+            "MUO": {
+                "mu_ID": "NUM_TightID_DEN_TrackerMuons",
+                "mu_Iso": "NUM_promptMVA_WP64ID_DEN_TightID",
+                "mu_Trig": "NUM_IsoMu24_DEN_CutBasedIdTight_and_PFIsoTight",  # in the future this should be something like NUM_IsoMu24_DEN_CutBasedIdTight_and_promptMVA_WP64ID
+            },
+        },
+        "tt_semilep_el": {
+            "EGM": {
+                "ele_Reco 2024Prompt Electron-ID-SF": "",
+                "ele_ID 2024Prompt Electron-ID-SF": "PromptMVA-Tight",
+                "ele_Trig 2024Prompt Electron-HLT-SF": "HLT_SF_Ele30_MVAiso80ID",  # in the future this should be something like HLT_SF_Ele30_PromptMVAID
+            },
+        },
     },
     "Winter22Run3": {
         "default": {
