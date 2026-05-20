@@ -315,7 +315,7 @@ def btag_wp(jets, year, campaign, tagger, borc, wp):
 
 
 btag_wp_dict = {
-    "2016_2016preVFP-UL": {
+    "2016preVFP_2016preVFP-UL": {
         "UParTAK4": {
             "b": {
                 "No": 0.0,
@@ -334,7 +334,7 @@ btag_wp_dict = {
             },
         },
     },
-    "2016_2016postVFP-UL": {
+    "2016postVFP_2016postVFP-UL": {
         "UParTAK4": {
             "b": {
                 "No": 0.0,
@@ -675,6 +675,7 @@ def wp_dict(year, campaign):
             return wps_dict
 
         for tagger in tagger_list:
+            if "deepCSV" in tagger: continue
             wps_dict[name_map[tagger.replace("_wp_values", "")]] = {"b": {}, "c": {}}
             # Get b WPs
             bwp = btag[tagger].inputs[0].description.split("/")

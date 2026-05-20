@@ -33,11 +33,14 @@ from BTVNanoCommissioning.helpers.definitions import get_discriminators, get_def
 
 def select_lepton(events, channel, campaign, iso_mode="tight"):
     eta_cut = 2.5 if (("24" in campaign) or ("25" in campaign)) else 2.4
+    use_promptmva = False
+    if "24" in campaign or "25" in campaign:
+        use_promptmva = True
     if channel == "mu":
         tight = (
             (events.Muon.pt > 30)
             & (abs(events.Muon.eta) < eta_cut)
-            & mu_promptmvaid(events, campaign)
+            & (mu_promptmvaid(events, campaign) if use_promptmva else mu_idiso(events, campaign))
         )
         if iso_mode == "tight":
             mask = tight
@@ -55,7 +58,7 @@ def select_lepton(events, channel, campaign, iso_mode="tight"):
         tight = (
             (events.Electron.pt > 30)
             & (abs(events.Electron.eta) < eta_cut)
-            & ele_promptmvaid(events, campaign)
+            & (ele_promptmvaid(events, campaign) if use_promptmva else ele_mvatightid(events, campaign))
         )
         if iso_mode == "tight":
             mask = tight
@@ -874,24 +877,32 @@ class NanoProcessor(processor.ProcessorABC):
 
         # Triggers
         triggers_mu = ["IsoMu24"]
-        triggers_el = ["Ele30_WPTight_Gsf"]
+        triggers_el = []
+        if "2016" in self._campaign:
+            triggers_mu.append("IsoTkMu24")
+            triggers_el = ["Ele27_WPTight_Gsf"]
+        elif "017" in self._campaign:
+            triggers_mu = ["IsoMu27"]
+            triggers_el = ["Ele27_WPTight_Gsf","Ele32_WPTight_Gsf"]
+        else:
+            triggers_el = ["Ele30_WPTight_Gsf"]
         triggers = triggers_mu if self.channel == "mu" else triggers_el
         req_trig = HLT_helper(events, triggers)
 
         # MET filters
         req_metf = MET_filters(events, self._campaign)
         eta_cut = 2.5 if (("24" in self._campaign) or ("25" in self._campaign)) else 2.4
-
+        use_promptmva = ("24" in self._campaign or "25" in self._campaign)
         # Loose veto objects
         mu_loose = (
             (events.Muon.pt > 15)
             & (abs(events.Muon.eta) < eta_cut)
-            & mu_promptmvaid(events, self._campaign)
+            & (mu_promptmvaid(events, self._campaign) if use_promptmva else mu_idiso(events, self._campaign))
         )
         el_loose = (
             (events.Electron.pt > 15)
             & (abs(events.Electron.eta) < eta_cut)
-            & ele_promptmvaid(events, self._campaign)
+            & (ele_promptmvaid(events, self._campaign) if use_promptmva else ele_mvatightid(events, self._campaign))
         )
 
         # Jet cleaning
