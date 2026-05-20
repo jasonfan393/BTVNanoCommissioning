@@ -2380,6 +2380,82 @@ def eleSFs(ele, correct_map, weights, syst=True, isHLT=False):
                             )
                             sfs_up = np.where(masknone, 1.0, sfs_up)
                             sfs_down = np.where(masknone, 1.0, sfs_down)
+                    elif sf_id.startswith("UL-"):
+                        # UL uses a two-bin reco scheme (RecoBelow20 / RecoAbove20)
+                        print("EGM sf_id =", repr(sf_id))
+                        print("available EGM keys:", list(correct_map["EGM"].keys()))
+                        print("\n")
+                        sfs_low = np.where(
+                            (ele.pt < 20.0) & ~masknone,
+                            correct_map["EGM"][sf_id].evaluate(
+                                sf_campaign,
+                                "sf",
+                                "RecoBelow20",
+                                ele_etaSC,
+                                ele_pt_low,
+                            ),
+                            1.0,
+                        )
+                        sfs = np.where(
+                            (ele.pt >= 20.0) & ~masknone,
+                            correct_map["EGM"][sf_id].evaluate(
+                                sf_campaign,
+                                "sf",
+                                "RecoAbove20",
+                                ele_etaSC,
+                                ele_pt,
+                            ),
+                            sfs_low,
+                        )
+                        sfs = np.where(masknone, 1.0, sfs)
+
+                        if syst:
+                            sfs_up_low = np.where(
+                                (ele.pt < 20.0) & ~masknone,
+                                correct_map["EGM"][sf_id].evaluate(
+                                    sf_campaign,
+                                    "sfup",
+                                    "RecoBelow20",
+                                    ele_etaSC,
+                                    ele_pt_low,
+                                ),
+                                0.0,
+                            )
+                            sfs_down_low = np.where(
+                                (ele.pt < 20.0) & ~masknone,
+                                correct_map["EGM"][sf_id].evaluate(
+                                    sf_campaign,
+                                    "sfdown",
+                                    "RecoBelow20",
+                                    ele_etaSC,
+                                    ele_pt_low,
+                                ),
+                                0.0,
+                            )
+                            sfs_up = np.where(
+                                (ele.pt >= 20.0) & ~masknone,
+                                correct_map["EGM"][sf_id].evaluate(
+                                    sf_campaign,
+                                    "sfup",
+                                    "RecoAbove20",
+                                    ele_etaSC,
+                                    ele_pt,
+                                ),
+                                sfs_up_low,
+                            )
+                            sfs_down = np.where(
+                                (ele.pt >= 20.0) & ~masknone,
+                                correct_map["EGM"][sf_id].evaluate(
+                                    sf_campaign,
+                                    "sfdown",
+                                    "RecoAbove20",
+                                    ele_etaSC,
+                                    ele_pt,
+                                ),
+                                sfs_down_low,
+                            )
+                            sfs_up = np.where(masknone, 1.0, sfs_up)
+                            sfs_down = np.where(masknone, 1.0, sfs_down)
 
                     else:
                         sfs_low = np.where(

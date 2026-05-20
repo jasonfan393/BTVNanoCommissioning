@@ -54,6 +54,20 @@ correction_config = {
                 "muonSS": "Run2-2016preVFP-UL-NanoAODv9",  # Nanov15 unavailable
                 "EGM": "Run2-2016preVFP-UL-NanoAODv15",
                 "electronSS": "Run2-2016preVFP-UL-NanoAODv15",
+                "JME": "Run2-2016preVFP-UL-NanoAODv15"
+            },
+        },
+        "tt_semilep_mu": {
+            "MUO": {
+                "mu_ID": "NUM_TightID_DEN_TrackerMuons",
+                "mu_Iso": "NUM_TightRelIso_DEN_TightIDandIPCut",
+                "mu_Trig": "NUM_IsoMu24_or_IsoTkMu24_DEN_CutBasedIdTight_and_PFIsoTight",  # in the future this should be something like NUM_IsoMu24_DEN_CutBasedIdTight_and_promptMVA_WP64ID
+            },
+        },
+        "tt_semilep_el": {
+            "EGM": {
+                "ele_Reco 2016preVFP UL-Electron-ID-SF": "",
+                "ele_ID 2016preVFP UL-Electron-ID-SF": "wp80iso",
             },
         },
     },
