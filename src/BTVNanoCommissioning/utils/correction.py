@@ -1030,8 +1030,9 @@ def JME_shifts(
             jer_split_id = jerc_id_arr[3]
         else:
             jer_split_id = "total"  # Default case
-        #FIXME this is a hack to get around syst = all
-        jer_split_id = "split"
+        if systematic == all:
+            jes_sources_id = "full"
+            jer_split_id = "split"
         #
     jecname = ""
     if "JME" in correct_map.keys():
@@ -2475,9 +2476,6 @@ def eleSFs(ele, correct_map, weights, syst=True, isHLT=False):
                             sfs_down = np.where(masknone, 1.0, sfs_down)
                     elif sf_id.startswith("UL-"):
                         # UL uses a two-bin reco scheme (RecoBelow20 / RecoAbove20)
-                        print("EGM sf_id =", repr(sf_id))
-                        print("available EGM keys:", list(correct_map["EGM"].keys()))
-                        print("\n")
                         sfs_low = np.where(
                             (ele.pt < 20.0) & ~masknone,
                             correct_map["EGM"][sf_id].evaluate(

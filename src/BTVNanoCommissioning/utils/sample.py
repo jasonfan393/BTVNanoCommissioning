@@ -170,7 +170,7 @@ predefined_sample = {
         ],
     },
     "sf_ttsemilep_tnp": {
-        "data": ["Muon0", "Muon1", "EGamma0", "EGamma1"],
+        "data": ["Muon0", "Muon1", "EGamma0", "EGamma1","SingleMuon","SingleElectron","EGamma"],
         "run3_MC": [
             "DYto2E-2Jets_Bin-MLL-10to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8",
             "DYto2E-2Jets_Bin-MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8",
