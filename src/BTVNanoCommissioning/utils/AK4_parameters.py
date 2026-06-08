@@ -361,14 +361,14 @@ correction_config = {
             "LUM": "puWeights_BCDEFGHI.json.gz",
             "JME": {
                 # TODO: JER are a placeholder for now (July 2025)
-                "MC": "Summer24Prompt24_V2 Summer23BPixPrompt23_RunD_JRV1",
-                "Run2024C": "Summer24Prompt24_V2",
-                "Run2024D": "Summer24Prompt24_V2",
-                "Run2024E": "Summer24Prompt24_V2",
-                "Run2024F": "Summer24Prompt24_V2",
-                "Run2024G": "Summer24Prompt24_V2",
-                "Run2024H": "Summer24Prompt24_V2",
-                "Run2024I": "Summer24Prompt24_V2",
+                "MC": "Summer24Prompt24_V3 Summer24Prompt24_JRV1",
+                "Run2024C": "Summer24Prompt24_V3",
+                "Run2024D": "Summer24Prompt24_V3",
+                "Run2024E": "Summer24Prompt24_V3",
+                "Run2024F": "Summer24Prompt24_V3",
+                "Run2024G": "Summer24Prompt24_V3",
+                "Run2024H": "Summer24Prompt24_V3",
+                "Run2024I": "Summer24Prompt24_V3",
             },
             "jetveto": {"Summer24Prompt24_RunBCDEFGHI_V1": "jetvetomap"},
             "MUO": {

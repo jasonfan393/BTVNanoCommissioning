@@ -908,6 +908,26 @@ xsection = [
     # Binned by PT: MuEnriched                                                #
     # ----------------------------------------------------------------------- #
     {
+        "id": "6418785d2946177d33a79a5c",
+        "process_name": "QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
+        "cross_section": "1.085",
+        "total_uncertainty": "0.009838",
+        "accuracy": "unknown",
+        "DAS": "/QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2/MINIAODSIM",
+        "energy": "13",
+        "createdBy": "yuzhe",
+        "status": "new",
+        "MCM": "HIG-RunIISummer20UL17MiniAODv2-00304",
+        "equivalent_lumi": "921.6",
+        "fraction_negative_weight": "0.0",
+        "shower": "Pythia8",
+        "matrix_generator": "none",
+        "comments": "Automatically computed",
+        "modifiedOn": "2023-03-20 15:14:37",
+        "createdOn": "2023-03-20 15:14:37",
+        "modifiedBy": "yuzhe"
+    },
+    {
         "id": "60d061512946173d80086a70",
         "process_name": "QCD_Pt-120To170_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
         "cross_section": "21070.0",
