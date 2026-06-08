@@ -960,7 +960,7 @@ def JME_shifts(
             jer_split_id = jerc_id_arr[3]
         else:
             jer_split_id = "total"  # Default case
-        if systematic == all:
+        if systematic == "all":
             jes_sources_id = "full"
             jer_split_id = "split"
         #
@@ -1062,6 +1062,9 @@ def JME_shifts(
             t1j["pt_noMuRaw"] = t1j["pt_raw"] * (1.0 - t1j["muonSubtrFactor"])
             t1j["phi_noMuRaw"] = t1j["phi"] + t1j["muonSubtrDeltaPhi"]
             t1j["eta_noMuRaw"] = t1j["eta"] + t1j["muonSubtrDeltaEta"]
+            print("Available JME keys:", [k for k in correct_map["JME"].keys()])
+            print("Looking for:", f"{jecname}_L1FastJet_AK4PFPuppi")
+            print("\n")
             L1corr = correct_map["JME"][f"{jecname}_L1FastJet_AK4PFPuppi"]
             t1j["pt_noMuL1"] = t1j["pt_noMuRaw"] * L1corr.evaluate(
                 np.array(t1j["area"]),
@@ -1252,26 +1255,26 @@ def JME_shifts(
                                 jer_bin_high = jer_bins[jer_bin_name][1]
 
                                 jer_shifted_pt = np.where(
-                                    (j["eta"] >= jer_bin_low)
-                                    & (j["eta"] < jer_bin_high),
+                                    (np.abs(j["eta"]) >= jer_bin_low)
+                                    & (np.abs(j["eta"]) < jer_bin_high),
                                     j[f"pt_JECnom_JER{var}"],
                                     j["pt_JECnom_JERnom"],
                                 )
                                 jer_shifted_mass = np.where(
-                                    (j["eta"] >= jer_bin_low)
-                                    & (j["eta"] < jer_bin_high),
+                                    (np.abs(j["eta"]) >= jer_bin_low)
+                                    & (np.abs(j["eta"]) < jer_bin_high),
                                     j[f"mass_JECnom_JER{var}"],
                                     j["mass_JECnom_JERnom"],
                                 )
                                 _t1jets_var["pt"] = np.where(
-                                    (_t1jets_var["eta"] >= jer_bin_low)
-                                    & (_t1jets_var["eta"] < jer_bin_high),
+                                    (np.abs(_t1jets_var["eta"]) >= jer_bin_low)
+                                    & (np.abs(_t1jets_var["eta"]) < jer_bin_high),
                                     _t1jets_var[f"pt_JECnom_JER{var}"],
                                     _t1jets_var["pt_JECnom_JERnom"],
                                 )
                                 _t1jets_var["pt"] = np.where(
-                                    (_t1jets_var["eta"] >= jer_bin_low)
-                                    & (_t1jets_var["eta"] < jer_bin_high),
+                                    (np.abs(_t1jets_var["eta"]) >= jer_bin_low)
+                                    & (np.abs(_t1jets_var["eta"]) < jer_bin_high),
                                     _t1jets_var["pt_noMu_fullcorr"],
                                     t1jets["pt_noMu_fullcorr"],
                                 )
