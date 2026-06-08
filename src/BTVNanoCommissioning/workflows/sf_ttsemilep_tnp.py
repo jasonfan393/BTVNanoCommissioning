@@ -19,6 +19,8 @@ from BTVNanoCommissioning.utils.array_writer import array_writer
 from BTVNanoCommissioning.utils.selection import (
     HLT_helper,
     jet_id,
+    mu_promptmvaid,
+    ele_promptmvaid,
     MET_filters,
     mu_idiso,
     ele_mvatightid,
@@ -35,7 +37,7 @@ def select_lepton(events, channel, campaign, iso_mode="tight"):
         tight = (
             (events.Muon.pt > 30)
             & (abs(events.Muon.eta) < eta_cut)
-            & mu_idiso(events, campaign)
+            & mu_promptmvaid(events, campaign)
         )
         if iso_mode == "tight":
             mask = tight
@@ -53,7 +55,7 @@ def select_lepton(events, channel, campaign, iso_mode="tight"):
         tight = (
             (events.Electron.pt > 30)
             & (abs(events.Electron.eta) < eta_cut)
-            & ele_mvatightid(events, campaign)
+            & ele_promptmvaid(events, campaign)
         )
         if iso_mode == "tight":
             mask = tight
@@ -314,7 +316,7 @@ class NanoProcessor(processor.ProcessorABC):
         isArray=False,
         noHist=False,
         chunksize=10000,
-        selectionModifier="mu",  # "mu" or "el"
+        selectionModifier="",  # "tt_semilep_mu" or "tt_semilep_el"
         tag_tagger="UParTAK4",
     ):
         self._year = year
@@ -325,10 +327,10 @@ class NanoProcessor(processor.ProcessorABC):
         self.noHist = noHist
         self.lumiMask = load_lumi(self._campaign)
         self.chunksize = chunksize
-        if selectionModifier not in ["el", "mu"]:
+        if selectionModifier not in ["tt_semilep_el", "tt_semilep_mu"]:
             raise ValueError(f"Invalid selectionModifier: {selectionModifier}")
-        self.channel = selectionModifier
-        self.SF_map = load_SF(self._year, self._campaign)
+        self.channel = "el" if (selectionModifier == "tt_semilep_el") else "mu"
+        self.SF_map = load_SF(self._year, self._campaign, selectionModifier, isSyst)
         self._wp_table = wp_dict(year, campaign)
         self._all_taggers = sorted(self._wp_table.keys())
         self.tag_tagger = tag_tagger

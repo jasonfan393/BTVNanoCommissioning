@@ -171,7 +171,7 @@ predefined_sample = {
     },
     "sf_ttsemilep_tnp": {
         "data": ["Muon0", "Muon1", "EGamma0", "EGamma1"],
-        "MC": [
+        "run3_MC": [
             "DYto2E-2Jets_Bin-MLL-10to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8",
             "DYto2E-2Jets_Bin-MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8",
             "DYto2Mu-2Jets_Bin-MLL-10to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8",
@@ -203,8 +203,9 @@ predefined_sample = {
             "WW_TuneCP5_13p6TeV_pythia8",
             "WZ_TuneCP5_13p6TeV_pythia8",
             "TTto4Q_TuneCP5_13p6TeV_powheg-pythia8",
-            "TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8",
             "TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8",
+            "TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8"],
+        "run2_MC": [
 
             #Run2 Samples:
             "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8",
