@@ -1030,7 +1030,7 @@ def JME_shifts(
             jer_split_id = jerc_id_arr[3]
         else:
             jer_split_id = "total"  # Default case
-        #FIXME
+        #FIXME this is a hack to get around syst = all
         jer_split_id = "split"
         #
     jecname = ""

@@ -50,141 +50,6 @@ xsection = [
         "energy": "13.6",
     },
     {
-        "id": "63e22ec22946177d33a75cb3",
-        "process_name": "DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8",
-        "cross_section": "20460.0",
-        "total_uncertainty": "22.97",
-        "DAS": "/DYJetsToLL_M-10to50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIISummer20UL16MiniAODAPVv2-106X_mcRun2_asymptotic_preVFP_v11-v2/MINIAODSIM",
-        "energy": "13"
-    },
-    {
-        "id": "5b44a936f368576cbd3d4b2e",
-        "process_name": "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8",
-        "cross_section": "6529.0",
-        "total_uncertainty": "28.29",
-        "DAS": "/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017RECOPF_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
-        "energy": "13"
-    },
-    {
-        "id": "6418785d2946177d33a79a5c",
-        "process_name": "QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-        "cross_section": "1.085",
-        "total_uncertainty": "0.009838",
-        "DAS": "/QCD_Pt-1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2/MINIAODSIM",
-        "energy": "13"
-    },
-    {
-        "id": "60d061512946173d80086a70",
-        "process_name": "QCD_Pt-120To170_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-        "cross_section": "21070.0",
-        "total_uncertainty": "65.28",
-        "DAS": "/QCD_Pt-120To170_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL16MiniAOD-106X_mcRun2_asymptotic_v13-v2/MINIAODSIM",
-        "energy": "13"
-    },
-    {
-        "id": "641878602946177d33a79a5f",
-        "process_name": "QCD_Pt-170To300_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-        "cross_section": "7000.0",
-        "total_uncertainty": "65.38",
-        "DAS": "/QCD_Pt-170To300_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL17MiniAODv2-106X_mc2017_realistic_v9-v2/MINIAODSIM",
-        "energy": "13"
-    },
-    {
-        "id": "60d061552946173d80086a73",
-        "process_name": "QCD_Pt-300To470_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-        "cross_section": "622.4",
-        "total_uncertainty": "1.891",
-        "DAS": "/QCD_Pt-300To470_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL16MiniAOD-106X_mcRun2_asymptotic_v13-v2/MINIAODSIM",
-        "energy": "13"
-    },
-    {
-        "id": "60d061572946173d80086a74",
-        "process_name": "QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-        "cross_section": "1361000.0",
-        "total_uncertainty": "4263.0",
-        "DAS": "/QCD_Pt-30To50_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL16MiniAOD-106X_mcRun2_asymptotic_v13-v2/MINIAODSIM",
-        "energy": "13"
-    },
-    {
-        "id": "60d0615c2946173d80086a76",
-        "process_name": "QCD_Pt-470To600_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-        "cross_section": "58.86",
-        "total_uncertainty": "0.1776",
-        "DAS": "/QCD_Pt-470To600_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL16MiniAOD-106X_mcRun2_asymptotic_v13-v2/MINIAODSIM",
-        "energy": "13"
-    },
-    {
-        "id": "60d0615e2946173d80086a77",
-        "process_name": "QCD_Pt-50To80_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-        "cross_section": "377800.0",
-        "total_uncertainty": "1184.0",
-        "DAS": "/QCD_Pt-50To80_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL16MiniAOD-106X_mcRun2_asymptotic_v13-v2/MINIAODSIM",
-        "energy": "13"
-    },
-    {
-        "id": "60d061602946173d80086a78",
-        "process_name": "QCD_Pt-600To800_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-        "cross_section": "18.22",
-        "total_uncertainty": "0.05471",
-        "DAS": "/QCD_Pt-600To800_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL16MiniAOD-106X_mcRun2_asymptotic_v13-v2/MINIAODSIM",
-        "energy": "13"
-    },
-    {
-        "id": "60d061622946173d80086a79",
-        "process_name": "QCD_Pt-800To1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-        "cross_section": "3.25",
-        "total_uncertainty": "0.0148",
-        "DAS": "/QCD_Pt-800To1000_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL16MiniAOD-106X_mcRun2_asymptotic_v13-v2/MINIAODSIM",
-        "energy": "13"
-    },
-    {
-        "id": "60d061642946173d80086a7a",
-        "process_name": "QCD_Pt-80To120_MuEnrichedPt5_TuneCP5_13TeV-pythia8",
-        "cross_section": "88620.0",
-        "total_uncertainty": "275.1",
-        "DAS": "/QCD_Pt-80To120_MuEnrichedPt5_TuneCP5_13TeV-pythia8/RunIISummer20UL16MiniAOD-106X_mcRun2_asymptotic_v13-v2/MINIAODSIM",
-        "energy": "13"
-    },
-    {
-        "id": "5b44aacdf368576cbd3d4d89",
-        "process_name": "ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8",
-        "cross_section": "34.97",
-        "total_uncertainty": "0.02827",
-        "DAS": "/ST_tW_antitop_5f_NoFullyHadronicDecays_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
-        "energy": "13"
-    },
-    {
-        "id": "60d0623b2946173d80086aca",
-        "process_name": "TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8",
-        "cross_section": "87.4",
-        "total_uncertainty": "0.5174",
-        "DAS": "/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL16MiniAOD-106X_mcRun2_asymptotic_v13-v2/MINIAODSIM",
-        "energy": "13"
-    },
-    {
-        "id": "5b44ab37f368576cbd3d4e20",
-        "process_name": "TTToHadronic_TuneCP5_13TeV-powheg-pythia8",
-        "cross_section": "380.2",
-        "total_uncertainty": "0.5174",
-        "DAS": "/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
-        "energy": "13"
-    },
-    {
-        "id": "5b44ab3df368576cbd3d4e2a",
-        "process_name": "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8",
-        "cross_section": "364.4",
-        "total_uncertainty": "0.5174",
-        "DAS": "/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM",
-        "energy": "13"
-    },
-    {
-        "id": "68d111a8f8a546d59c3d82c6",
-        "process_name": "DYto2E-2Jets_Bin-MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8",
-        "cross_section": "2.244e+03",
-        "total_uncertainty": "9.799e+00",
-        "DAS": "/DYto2E-2Jets_Bin-MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/RunIII2024Summer24MiniAOD-140X_mcRun3_2024_realistic_v26-v4/MINIAODSIM",
-    },
-    {
         "process_name": "TTToSemiLeptonic_TuneCP5_13p6TeV-powheg-pythia8",
         "cross_section": "404.0",
         "DAS": "/TTToSemiLeptonic_TuneCP5_13p6TeV-powheg-pythia8/Run3Winter22NanoAOD-FlatPU0to70_pilot_122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM",
@@ -1408,6 +1273,10 @@ xsection = [
         "fraction_negative_weight": "0",
         "shower": "Pythia8",
         "MCM": "TSG-Run3Summer22MiniAODv3-00045",
+=======
+        "shower": "Pythia8",
+        "MCM": "JME-Run3Summer22MiniAODv3-01052",
+>>>>>>> 60811ba (update xsections, fix bug preventing leptons from being saved)
     },
     {
         "DAS": "/QCD_PT-30to50_TuneCP5_13p6TeV_pythia8/Run3Summer22MiniAODv3-124X_mcRun3_2022_realistic_v12-v2/MINIAODSIM",
@@ -2089,5 +1958,5 @@ xsection = [
         "accuracy": "LO",
         "energy": "13.6",
         "comment": "GenXSecAnalyzer",
-    }
+    },
 ]
