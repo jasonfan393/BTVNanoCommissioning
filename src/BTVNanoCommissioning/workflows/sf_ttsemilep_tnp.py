@@ -862,6 +862,7 @@ class NanoProcessor(processor.ProcessorABC):
                     output["PDFaS_sumwUp"] = sumws["PDFaS_sumwUp"]
                     output["PDFaS_sumwDown"] = sumws["PDFaS_sumwDown"]
                 if "LHEScaleWeight" in events.fields:
+                    print("I AM HERE")
                     output["muR_sumwUp"] = sumws["muR_sumwUp"]
                     output["muR_sumwDown"] = sumws["muR_sumwDown"]
                     output["muF_sumwUp"] = sumws["muF_sumwUp"]

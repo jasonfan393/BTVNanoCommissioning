@@ -57,7 +57,7 @@ def get_condor_submitter_parser(parser):
     parser.add_argument(
         "--remoteRepo",
         default=None,
-        help="If specified, access BTVNanoCommissioning from a remote tarball (downloaded via https), instead of from a transferred sandbox",
+        help="If specified, access BTVNanoCommsioning from a remote tarball (downloaded via https), instead of from a transferred sandbox",
     )
     parser.add_argument(
         "--noSpool", action="store_true", help="Submit condor jobs without spooling."
@@ -104,8 +104,8 @@ def get_main_parser():
             "Summer22",
             "Summer22EE",
             "Summer23",
-            "Summer23BPix",
             "Summer24",
+            "Summer23BPix",
             "2018-UL",
             "2017-UL",
             "2016preVFP-UL",
@@ -143,6 +143,12 @@ def get_main_parser():
         type=str,
         default=None,
         help="Only  process/skip part of the dataset. By input list of file",
+    )
+    parser.add_argument(
+        "--selectionModifier",
+        type=str,
+        default=None,
+        help="selection Modifier",
     )
     parser.add_argument(
         "--voms",
@@ -306,7 +312,6 @@ Error      = {log_dir}/job.err_$(Cluster)-$(Process)
 should_transfer_files   = YES
 when_to_transfer_output = ON_EXIT_OR_EVICT
 transfer_input_files    = {transfer_input_files}
-
 on_exit_remove   = (ExitBySignal == False) && (ExitCode == 0)
 max_retries      = 3
 requirements     = (Machine =!= split(LastRemoteHost, "@")[1])
