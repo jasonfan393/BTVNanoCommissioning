@@ -97,27 +97,7 @@ parser.add_argument(
     "-e",
     "--exp_systs",
     action="append",
-    default=[
-        "puweight",
-        "JESRegrouped_Absolute_$CAMPAIGN",
-        "JESRegrouped_Absolute",
-        "JESRegrouped_BBEC1_$CAMPAIGN",
-        "JESRegrouped_BBEC1",
-        "JESRegrouped_EC2_$CAMPAIGN",
-        "JESRegrouped_EC2",
-        "JESRegrouped_FlavorQCD",
-        "JESRegrouped_HF_$CAMPAIGN",
-        "JESRegrouped_HF",
-        "JESRegrouped_RelativeBal",
-        "JESRegrouped_RelativeSample_$CAMPAIGN",
-        "JERTotal",
-        "UES",
-        "ele_Reco",
-        "ele_ID",
-        "ele_Trig",
-        "ElectronScale",
-        "ElectronSmear",
-],
+    default=[],
     choices=[
         "puweight",
         "JESRegrouped_Absolute_$CAMPAIGN",
@@ -153,14 +133,7 @@ parser.add_argument(
     "-t",
     "--th_systs",
     action="append",
-    default=[
-        "ttbar_weight",
-        "PDF_weight",
-        "aS_weight",
-        "scalevar_muF",
-        "scalevar_muR",
-        "UEPS_ISR",
-        "UEPS_FSR"],
+    default=[],
     choices=[
         "ttbar_weight",
         "PDF_weight",
@@ -398,7 +371,6 @@ def plot_systs(
     axis_nom["syst"] = "nominal"
 
     # Get nominal MC and data histograms
-    print(h_mc.axes["syst"])
     h_mc_nom = h_mc[axis_nom]
     if "top_pt" not in var:  # data is empty for top_pt and antitop_pt
         h_data = h_data[axis_nom]

@@ -1436,10 +1436,8 @@ xsection = [
         "fraction_negative_weight": "0",
         "shower": "Pythia8",
         "MCM": "TSG-Run3Summer22MiniAODv3-00045",
-=======
         "shower": "Pythia8",
         "MCM": "JME-Run3Summer22MiniAODv3-01052",
->>>>>>> 60811ba (update xsections, fix bug preventing leptons from being saved)
     },
     {
         "DAS": "/QCD_PT-30to50_TuneCP5_13p6TeV_pythia8/Run3Summer22MiniAODv3-124X_mcRun3_2022_realistic_v12-v2/MINIAODSIM",

@@ -724,7 +724,6 @@ def get_JES_keys(year: int | str, campaign: str = "") -> dict[str, set]:
             "Regrouped_HF",
             "Regrouped_RelativeBal",
             f"Regrouped_RelativeSample_{year}",
-            # "Total"
         },
         "total": {"Total"},
     }
@@ -1033,7 +1032,6 @@ def JME_shifts(
         if systematic == "all":
             jes_sources_id = "full"
             jer_split_id = "split"
-        #
     jecname = ""
     if "JME" in correct_map.keys():
         ## correctionlib
@@ -1159,16 +1157,6 @@ def JME_shifts(
                         stacklevel=2,
                     )
                     t1j["pt_noMuL1"] = t1j["pt_noMuRaw"]
-            print("Available JME keys:", [k for k in correct_map["JME"].keys()])
-            print("Looking for:", f"{jecname}_L1FastJet_AK4PFPuppi")
-            print("\n")
-            L1corr = correct_map["JME"][f"{jecname}_L1FastJet_AK4PFPuppi"]
-            t1j["pt_noMuL1"] = t1j["pt_noMuRaw"] * L1corr.evaluate(
-                np.array(t1j["area"]),
-                np.array(t1j["eta_noMuRaw"]),
-                np.array(t1j["pt_noMuRaw"]),
-                np.array(t1j["rho"]),
-            )
 
             ## store the original met info (nocorrmet), raw met, nanoaod met
             ## Use MET object matching the JEC jet algorithm.
@@ -1871,47 +1859,46 @@ def MUO_shifts(shifts, correct_map, events, isRealData, systematic=False):
             mu_resol_up["pt"] = mu_pt_corr_resolup
             mu_resol_down["pt"] = mu_pt_corr_resoldown
 
-            #FIXME Don't load this in for data? 
-            shifts += [
-                (
-                    {
-                        "Jet": shifts[0][0]["Jet"],
-                        "MET": shifts[0][0]["MET"],
-                        "Muon": mu_up,
-                    },
-                    "MuonScaleUp",
-                )
-            ]
-            shifts += [
-                (
-                    {
-                        "Jet": shifts[0][0]["Jet"],
-                        "MET": shifts[0][0]["MET"],
-                        "Muon": mu_down,
-                    },
-                    "MuonScaleDown",
-                )
-            ]
-            shifts += [
-                (
-                    {
-                        "Jet": shifts[0][0]["Jet"],
-                        "MET": shifts[0][0]["MET"],
-                        "Muon": mu_resol_up,
-                    },
-                    "MuonResolUp",
-                )
-            ]
-            shifts += [
-                (
-                    {
-                        "Jet": shifts[0][0]["Jet"],
-                        "MET": shifts[0][0]["MET"],
-                        "Muon": mu_resol_down,
-                    },
-                    "MuonResolDown",
-                )
+        shifts += [
+            (
+                {
+                    "Jet": shifts[0][0]["Jet"],
+                    "MET": shifts[0][0]["MET"],
+                    "Muon": mu_up,
+                },
+                "MuonScaleUp",
+            )
         ]
+        shifts += [
+            (
+                {
+                    "Jet": shifts[0][0]["Jet"],
+                    "MET": shifts[0][0]["MET"],
+                    "Muon": mu_down,
+                },
+                "MuonScaleDown",
+            )
+        ]
+        shifts += [
+            (
+                {
+                    "Jet": shifts[0][0]["Jet"],
+                    "MET": shifts[0][0]["MET"],
+                    "Muon": mu_resol_up,
+                },
+                "MuonResolUp",
+            )
+        ]
+        shifts += [
+            (
+                {
+                    "Jet": shifts[0][0]["Jet"],
+                    "MET": shifts[0][0]["MET"],
+                    "Muon": mu_resol_down,
+                },
+                "MuonResolDown",
+            )
+    ]
 
     return shifts
 

@@ -675,7 +675,6 @@ def wp_dict(year, campaign):
             return wps_dict
 
         for tagger in tagger_list:
-            if "deepCSV" in tagger: continue
             wps_dict[name_map[tagger.replace("_wp_values", "")]] = {"b": {}, "c": {}}
             # Get b WPs
             bwp = btag[tagger].inputs[0].description.split("/")

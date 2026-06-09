@@ -29,9 +29,12 @@ for key in workflow output samplejson year campaign isSyst isArray noHist overwr
 done
 
 # Unparse arguments and send to runner.py
-OPTS="--wf ${ARGS[workflow]} --year ${ARGS[year]} --campaign ${ARGS[campaign]} --chunk ${ARGS[chunk]} --selectionModifier ${ARGS[selectionModifier]}"
+OPTS="--wf ${ARGS[workflow]} --year ${ARGS[year]} --campaign ${ARGS[campaign]} --chunk ${ARGS[chunk]} "
 if [ "${ARGS[voms]}" != "null" ]; then
     OPTS="$OPTS --voms ${ARGS[voms]}"
+fi
+if [ "${ARGS[selectionModifier]}" != "null" ]; then
+    OPTS="$OPTS --selectionModifier ${ARGS[selectionModifier]}"
 fi
 if [ "${ARGS[isSyst]}" != "false" ]; then
     OPTS="$OPTS --isSyst ${ARGS[isSyst]}"
