@@ -58,7 +58,7 @@ parser.add_argument(
         "2D_emu_ttdilep_sf",
         "2D_e_ttsemilep_sf",
         "2D_mu_ttsemilep_sf",
-        "sf_ttsemilep_tnp"
+        "sf_ttsemilep_tnp",
     ],
     help="Workflow.",
 )

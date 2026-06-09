@@ -229,7 +229,7 @@ def config_parser(parser):
         default="Summer23",
         help="Dataset campaign, change the corresponding correction files",
     )
-    parser.add_argument("--selectionModifier", default = "")
+    parser.add_argument("--selectionModifier", default="")
     parser.add_argument(
         "--isSyst",
         default="False",

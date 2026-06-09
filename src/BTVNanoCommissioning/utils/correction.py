@@ -1898,7 +1898,7 @@ def MUO_shifts(shifts, correct_map, events, isRealData, systematic=False):
                 },
                 "MuonResolDown",
             )
-    ]
+        ]
 
     return shifts
 
@@ -3886,7 +3886,7 @@ def common_shifts(self, events):
             shift[0]["Muon"] = events.Muon
 
     if "electronSS" in self.SF_map.keys():
-       shifts = EGM_shifts(shifts, self.SF_map, events, isRealData, self.isSyst)
+        shifts = EGM_shifts(shifts, self.SF_map, events, isRealData, self.isSyst)
     else:
         for shift in shifts:
             shift[0]["Electron"] = events.Electron
