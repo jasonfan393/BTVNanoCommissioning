@@ -964,7 +964,7 @@ class NanoProcessor(processor.ProcessorABC):
             )
             base_jet_mask = jet_id(
                 ev, self._campaign, max_eta=eta_cut, min_pt=30
-            )  # FIXME min_pt change
+            )
             return ak.fill_none(base_jet_mask & clean_mu & clean_el, False, axis=-1)
 
         # Cutflow helper
@@ -1295,7 +1295,6 @@ class NanoProcessor(processor.ProcessorABC):
                 rmask_np = ak.to_numpy(ak.fill_none(rmask, False)) & log_lambda_mask
                 if not np.any(rmask_np):
                     continue
-                # FIXME cleaning up for readability
                 require_tag = rname == "central"
                 ones = ak.ones_like(had_pt_ok, dtype=bool)
                 if rname == "central":
