@@ -962,9 +962,7 @@ class NanoProcessor(processor.ProcessorABC):
             clean_el = ak.where(
                 has_el, ak.all(dr_el > 0.4, axis=-1, mask_identity=True), all_true
             )
-            base_jet_mask = jet_id(
-                ev, self._campaign, max_eta=eta_cut, min_pt=30
-            )
+            base_jet_mask = jet_id(ev, self._campaign, max_eta=eta_cut, min_pt=30)
             return ak.fill_none(base_jet_mask & clean_mu & clean_el, False, axis=-1)
 
         # Cutflow helper

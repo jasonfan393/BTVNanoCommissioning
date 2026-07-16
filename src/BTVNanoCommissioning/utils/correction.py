@@ -1269,7 +1269,6 @@ def JME_shifts(
                 ## apply nominal JER to nominal JES/JEC
                 j["pt"] = j["pt_JECnom"]
                 j["mass"] = j["mass_JECnom"]
-                print(jername) #FIXME REMOVE LATER
                 jer_smear_nom = get_JER(correct_map, jername, j, "nom", jet_algo)
                 j["pt_JECnom_JERnom"] = j["pt_JECnom"] * jer_smear_nom
                 j["mass_JECnom_JERnom"] = j["mass_JECnom"] * jer_smear_nom
