@@ -529,7 +529,7 @@ if __name__ == "__main__":
         sys.exit(0)
 
     # load workflow
-    processor_instance = workflows[args.workflow](
+    proc_args = [
         args.year,
         args.campaign,
         outdir,
@@ -537,8 +537,11 @@ if __name__ == "__main__":
         args.isArray,
         args.noHist,
         args.chunk,
-        args.selectionModifier,
-    )
+    ]
+    if selection_modifier != "":
+        proc_args.append(args.selectionModifier)
+
+    processor_instance = workflows[args.workflow](*proc_args)
     setattr(processor_instance, "ttbar_reweights", args.ttbar_reweights)
 
     if args.skip_structure_validation:
