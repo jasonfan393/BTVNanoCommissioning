@@ -538,7 +538,7 @@ if __name__ == "__main__":
         args.noHist,
         args.chunk,
     ]
-    if selection_modifier != "":
+    if args.selectionModifier != "":
         proc_args.append(args.selectionModifier)
 
     processor_instance = workflows[args.workflow](*proc_args)
